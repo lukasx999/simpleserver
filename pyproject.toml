@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "simpleserver"
+version = "0.1.0"
+description = ""
+authors = ["Robert Ulmer <robert@familieulmer.info>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.10.0"
+flake8 = "^7.1.1"
+pyright = "^1.1.389"
+pytest = "^8.3.4"
+flake8-builtins = "^2.5.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+test_server = "simpleserver:main"
