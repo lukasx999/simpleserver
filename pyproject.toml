@@ -20,4 +20,5 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
-test_server = "simpleserver:main"
+simple_server = "simpleserver:main"
+simple_client = "simpleserver:client_main"
