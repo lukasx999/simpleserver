@@ -6,8 +6,10 @@ logging.basicConfig(level=logging.DEBUG)
 
 
 class MyTCPHandler(socketserver.BaseRequestHandler):
+    clients = []
 
     def handle(self):
+        # self.clients.append(self)
         self.request.sendall(
             b"Hi there: " + self.client_address[0].encode("utf-8") + b"\n"
         )
@@ -24,6 +26,13 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
                     self.data.upper() + b"\n" +
                     o_count + b"\n"
             )
+
+            # for client in self.clients:
+            #     client.request.sendall(
+            #         self.data + b"Lukas's Server sagt: " +
+            #             self.data.upper() + b"\n" +
+            #             o_count + b"\n"
+            #     )
 
             if self.data.upper() == b"QUIT":
                 break
