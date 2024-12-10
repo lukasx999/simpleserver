@@ -15,9 +15,16 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
         while True:
             self.data = self.request.recv(1024).strip()
             logger.debug("Received from %s: %s", self.client_address[0], self.data)
+
+            o_count = str(self.data).count("o")
+            o_count = "O's: {0}".format(o_count).encode()
+
             self.request.sendall(
-                self.data + b" is in upper case: " + self.data.upper() + b"\n"
+                self.data + b"Lukas's Server sagt: " +
+                    self.data.upper() + b"\n" +
+                    o_count + b"\n"
             )
+
             if self.data.upper() == b"QUIT":
                 break
         logger.debug("Client %s left", self.client_address[0])
