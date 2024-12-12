@@ -39,7 +39,7 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
         logger.debug("Client %s left", self.client_address[0])
 
 
-class MyTCPServer(socketserver.TCPServer):
+class MyTCPServer(socketserver.ThreadingTCPServer):
 
     HOST, PORT = "0.0.0.0", 9999
 
