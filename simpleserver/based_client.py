@@ -26,6 +26,7 @@ def recv(sock):
         try:
             msg = sock.recv(1024)
             print(msg.decode("utf-8"))
+            print("> ", end="", flush=True)
         except TimeoutError:
             continue
 
@@ -50,7 +51,7 @@ def main():
 
     while True:
         try:
-            data = input("")
+            data = input("> ")
         except KeyboardInterrupt:
             sock.sendall(b"quit")
             sock.close()
