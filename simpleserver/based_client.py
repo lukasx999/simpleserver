@@ -45,12 +45,12 @@ def main():
     sock.connect((hostname, port))
     sock.settimeout(0.5)
 
-    thread = Thread(target = recv, args = (sock, ))
-    thread.start()
+    rx = Thread(target = recv, args = (sock, ))
+    rx.start()
 
     while True:
         try:
-            data = input("> ")
+            data = input("")
         except KeyboardInterrupt:
             sock.sendall(b"quit")
             sock.close()
