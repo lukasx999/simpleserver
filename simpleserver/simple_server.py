@@ -6,28 +6,29 @@ logging.basicConfig(level=logging.DEBUG)
 
 
 class MyTCPHandler(socketserver.BaseRequestHandler):
+    clients = []
 
     def handle(self):
-        self.request.sendall(
-            b"Hi there: " + self.client_address[0].encode("utf-8") + b"\n"
-        )
+        client_address = self.client_address[0]
+
+        self.request.sendall(b"Hi there: " + client_address.encode("utf-8"))
         self.request.sendall(b"Type 'quit' to quit.\n")
+
+        self.clients.append(self)
+
         while True:
-            self.data = self.request.recv(1024).strip()
-            logger.debug("Received from %s: %s", self.client_address[0], self.data)
+            data = self.request.recv(1024).strip()
+            print(f"[{client_address}] {data.decode()}")
 
-            o_count = str(self.data).count("o")
-            o_count = "O's: {0}".format(o_count).encode()
-
-            self.request.sendall(
-                    b"Lukas's Server sagt: " +
-                    self.data[::-1].upper() + b"\n" +
-                    o_count + b"\n"
-            )
-
-            if self.data.upper() == b"QUIT":
+            if data == b"quit":
                 break
-        logger.debug("Client %s left", self.client_address[0])
+
+            for client in self.clients:
+                if client is not self:
+                    client.request.sendall(data)
+
+        print(f"Client {client_address} left")
+        self.clients.remove(self)
 
 
 class MyTCPServer(socketserver.ThreadingTCPServer):
@@ -39,14 +40,13 @@ class MyTCPServer(socketserver.ThreadingTCPServer):
         super().__init__((MyTCPServer.HOST, MyTCPServer.PORT), MyTCPHandler)
 
     def serve_forever(self, poll_interval=0.5):
-        logging.debug(f"Listening to: {MyTCPServer.HOST}:{MyTCPServer.PORT}")
+        print(f"Listening to: {MyTCPServer.HOST}:{MyTCPServer.PORT}\n")
         super().serve_forever(poll_interval)
 
 
 def main():
     with MyTCPServer() as server:
         server.serve_forever()
-
 
 if __name__ == "__main__":
     main()
