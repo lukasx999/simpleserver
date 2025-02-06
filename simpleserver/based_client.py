@@ -46,7 +46,7 @@ def main():
     sock.connect((hostname, port))
     sock.settimeout(0.5)
 
-    rx = Thread(target = recv, args = (sock, ))
+    rx = Thread(target = recv, args = (sock,))
     rx.start()
 
     while True:
