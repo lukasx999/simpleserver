@@ -14,12 +14,17 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
         self.request.sendall(b"Hi there: " + client_address.encode("utf-8"))
         self.request.sendall(b"Please enter your username: ")
         self.username = self.request.recv(1024).strip()
+        print(f"{self.username.decode()} ({client_address}) joined")
         self.request.sendall(b"Type 'quit' to quit.\n")
 
         self.clients.append(self)
 
         while True:
-            data = self.request.recv(1024).strip()
+            try:
+                data = self.request.recv(1024).strip()
+            except ConnectionResetError:
+                break
+
             print(f"{self.username.decode()}: {data.decode()}")
 
             if data == b"quit":
@@ -29,7 +34,7 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
                 if client is not self:
                     client.request.sendall(f"{self.username.decode()}: {data.decode()}".encode())
 
-        print(f"Client {client_address} left")
+        print(f"{self.username.decode()} ({client_address}) left")
         self.clients.remove(self)
 
 

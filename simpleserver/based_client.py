@@ -54,6 +54,7 @@ def main():
             data = input("> ")
         except KeyboardInterrupt:
             sock.sendall(b"quit")
+            rx.stop()
             sock.close()
             exit(0)
         sock.sendall(data.encode("utf-8"))
